@@ -49,11 +49,11 @@ public class StockServiceImpl implements StockService{
 
     @Override
     public List<Stock> getAllStock() {
-        return null;
+        return stockRepository.findAll();
     }
 
     @Override
-    public Stock updateStock(Long id, StockRequestDto requestDto) {
+    public Stock updateStock(Long id, StockRequestDto requestDto){
         if(requestDto == null){
             throw new StockNotNullException("Stock cannot be null");
         }
