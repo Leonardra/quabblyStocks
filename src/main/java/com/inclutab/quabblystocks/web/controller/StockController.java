@@ -6,13 +6,15 @@ import com.inclutab.quabblystocks.exception.StockException;
 import com.inclutab.quabblystocks.exception.StockNotFoundException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
 import com.inclutab.quabblystocks.service.StockService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/stocks")
 public class StockController {
@@ -34,7 +36,7 @@ public class StockController {
     public ResponseEntity<?> findStock(@PathVariable Long id){
         try {
             return new ResponseEntity<>(stockServiceImpl.findStock(id), HttpStatus.FOUND);
-        }catch(StockException ex){
+        }catch(StockNotFoundException ex){
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
