@@ -44,4 +44,12 @@ class StockServiceImplTest {
         stock.setPrice(40000.00);
         assertThrows(StockException.class, () -> stockServiceImpl.createStock(stock));
     }
+
+    @Test
+    void testThatStockPriceCannotBeZero(){
+        StockRequestDto stock = new StockRequestDto();
+        stock.setName("Television");
+        stock.setPrice(0.00);
+        assertThrows(StockException.class, () -> stockServiceImpl.createStock(stock));
+    }
 }

@@ -32,8 +32,9 @@ public class StockServiceImpl implements StockService{
                 || requestDto.getName().isEmpty()){
             throw new StockException("Stock must not have empty name");
         }
-
-
+        if(requestDto.getPrice() == 0 || requestDto.getPrice() < 0){
+            throw new StockException("Stock price cannot be zero or have negative value");
+        }
     }
     @Override
     public Stock findStock(Long id) {
