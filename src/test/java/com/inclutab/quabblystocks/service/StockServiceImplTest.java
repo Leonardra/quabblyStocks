@@ -76,13 +76,23 @@ class StockServiceImplTest {
         StockRequestDto stock = new StockRequestDto();
         stock.setName("Television");
         stock.setPrice(34000.00);
-        Stock savedStock = stockServiceImpl.createStock(stock);
+        stockServiceImpl.createStock(stock);
         StockRequestDto updateStock = new StockRequestDto();
         updateStock.setName("Furniture");
         updateStock.setPrice(30000.00);
         Stock updatedStock = stockServiceImpl.updateStock(1L, updateStock);
         assertThat(updatedStock.getName()).isEqualTo("Furniture");
         assertThat(updatedStock.getPrice()).isEqualTo(30000.0);
+    }
+
+    @Test
+    void testThatStockCanBeDeleted(){
+        StockRequestDto stock = new StockRequestDto();
+        stock.setName("Television");
+        stock.setPrice(34000.00);
+        stockServiceImpl.createStock(stock);
+        stockServiceImpl.deleteStock(1L);
+        assertThrows(StockNotFoundException.class, ()-> stockServiceImpl.findStock(1L));
     }
 
 
