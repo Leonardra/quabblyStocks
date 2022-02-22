@@ -3,6 +3,7 @@ package com.inclutab.quabblystocks.service;
 import com.inclutab.quabblystocks.data.dtos.StockRequestDto;
 import com.inclutab.quabblystocks.data.model.Stock;
 import com.inclutab.quabblystocks.data.repository.StockRepository;
+import com.inclutab.quabblystocks.exception.StockException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,20 @@ public class StockServiceImpl implements StockService{
         if(requestDto == null){
             throw new StockNotNullException("Stock cannot be null");
         }
+        validateStockFields(requestDto);
         ModelMapper modelMapper = new ModelMapper();
         Stock stock = modelMapper.map(requestDto, Stock.class);
         return stockRepository.save(stock);
     }
 
+    private void validateStockFields(StockRequestDto requestDto){
+        if(requestDto.getName() == null || requestDto.getName().isBlank()
+                || requestDto.getName().isEmpty()){
+            throw new StockException("Stock must not have empty name");
+        }
+
+
+    }
     @Override
     public Stock findStock(Long id) {
         return null;

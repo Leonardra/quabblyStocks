@@ -3,6 +3,7 @@ package com.inclutab.quabblystocks.service;
 import com.inclutab.quabblystocks.data.dtos.StockRequestDto;
 import com.inclutab.quabblystocks.data.model.Stock;
 import com.inclutab.quabblystocks.data.repository.StockRepository;
+import com.inclutab.quabblystocks.exception.StockException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,5 +35,13 @@ class StockServiceImplTest {
     void testThatNullStockCantBeSaved(){
         StockRequestDto stock = null;
         assertThrows(StockNotNullException.class, () -> stockServiceImpl.createStock(stock));
+    }
+
+    @Test
+    void testThatStockNameCannotBeEmpty(){
+        StockRequestDto stock = new StockRequestDto();
+        stock.setName("");
+        stock.setPrice(40000.00);
+        assertThrows(StockException.class, () -> stockServiceImpl.createStock(stock));
     }
 }
