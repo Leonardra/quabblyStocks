@@ -38,7 +38,7 @@ public class StockServiceImpl implements StockService{
     }
     @Override
     public Stock findStock(Long id) {
-        return null;
+        return stockRepository.findById(id).orElse(null);
     }
 
     @Override

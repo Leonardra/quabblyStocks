@@ -5,8 +5,6 @@ import com.inclutab.quabblystocks.data.model.Stock;
 import com.inclutab.quabblystocks.data.repository.StockRepository;
 import com.inclutab.quabblystocks.exception.StockException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -51,5 +49,15 @@ class StockServiceImplTest {
         stock.setName("Television");
         stock.setPrice(0.00);
         assertThrows(StockException.class, () -> stockServiceImpl.createStock(stock));
+    }
+
+    @Test
+    void testThatStockCanBeFound(){
+        StockRequestDto stock = new StockRequestDto();
+        stock.setName("Television");
+        stock.setPrice(34000.00);
+        stockServiceImpl.createStock(stock);
+        Stock found = stockServiceImpl.findStock(1L);
+        assertThat(found).isNotNull();
     }
 }
