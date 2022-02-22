@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Slf4j
@@ -24,7 +23,7 @@ class StockRepositoryTest {
     void setUp() {
         stock = new Stock();
         stock.setName("Television");
-        stock.setPrice(38000.00);
+        stock.setCurrentPrice(38000.00);
     }
 
     @Test
