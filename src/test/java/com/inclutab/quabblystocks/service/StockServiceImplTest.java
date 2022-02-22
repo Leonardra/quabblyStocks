@@ -6,6 +6,7 @@ import com.inclutab.quabblystocks.data.repository.StockRepository;
 import com.inclutab.quabblystocks.exception.StockException;
 import com.inclutab.quabblystocks.exception.StockNotFoundException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,11 @@ class StockServiceImplTest {
     StockService stockServiceImpl;
     @Autowired
     StockRepository stockRepository;
+
+    @BeforeEach
+    void setUp() {
+        stockRepository.deleteAll();
+    }
 
     @Test
     void testThatStockCanBeAdded(){
@@ -57,8 +63,8 @@ class StockServiceImplTest {
         StockRequestDto stock = new StockRequestDto();
         stock.setName("Television");
         stock.setCurrentPrice(34000.00);
-        stockServiceImpl.createStock(stock);
-        Stock found = stockServiceImpl.findStock(1L);
+        Stock savedStock = stockServiceImpl.createStock(stock);
+        Stock found = stockServiceImpl.findStock(savedStock.getId());
         assertThat(found).isNotNull();
     }
 
@@ -76,11 +82,11 @@ class StockServiceImplTest {
         StockRequestDto stock = new StockRequestDto();
         stock.setName("Television");
         stock.setCurrentPrice(34000.00);
-        stockServiceImpl.createStock(stock);
+        Stock savedStock = stockServiceImpl.createStock(stock);
         StockRequestDto updateStock = new StockRequestDto();
         updateStock.setName("Furniture");
         updateStock.setCurrentPrice(30000.00);
-        Stock updatedStock = stockServiceImpl.updateStock(1L, updateStock);
+        Stock updatedStock = stockServiceImpl.updateStock(savedStock.getId(), updateStock);
         assertThat(updatedStock.getName()).isEqualTo("Furniture");
         assertThat(updatedStock.getCurrentPrice()).isEqualTo(30000.0);
     }

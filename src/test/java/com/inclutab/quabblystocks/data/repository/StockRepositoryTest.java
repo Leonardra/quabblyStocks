@@ -21,6 +21,7 @@ class StockRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        stockRepository.deleteAll();
         stock = new Stock();
         stock.setName("Television");
         stock.setCurrentPrice(38000.00);
@@ -40,7 +41,7 @@ class StockRepositoryTest {
     @Test
     void testFindStock(){
         stockRepository.save(stock);
-        Stock foundStock = stockRepository.findById(1L).orElse(null);
+        Stock foundStock = stockRepository.findById(stock.getId()).orElse(null);
         assertThat(foundStock).isNotNull();
     }
 }
