@@ -4,12 +4,14 @@ import com.inclutab.quabblystocks.data.dtos.StockRequestDto;
 import com.inclutab.quabblystocks.data.model.Stock;
 import com.inclutab.quabblystocks.data.repository.StockRepository;
 import com.inclutab.quabblystocks.exception.StockException;
+import com.inclutab.quabblystocks.exception.StockNotFoundException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StockServiceImpl implements StockService{
@@ -38,7 +40,11 @@ public class StockServiceImpl implements StockService{
     }
     @Override
     public Stock findStock(Long id) {
-        return stockRepository.findById(id).orElse(null);
+        Optional<Stock> stock = stockRepository.findById(id);
+        if(stock.isPresent()){
+            return stock.get();
+        }
+        throw new StockNotFoundException("Stock with this id does not exist");
     }
 
     @Override
@@ -47,8 +53,19 @@ public class StockServiceImpl implements StockService{
     }
 
     @Override
-    public Stock updateStock(StockRequestDto requestDto) {
-        return null;
+    public Stock updateStock(Long id, StockRequestDto requestDto) {
+        if(requestDto == null){
+            throw new StockNotNullException("Stock cannot be null");
+        }
+        validateStockFields(requestDto);
+        Optional<Stock> optionalStock = stockRepository.findById(id);
+        if(optionalStock.isPresent()){
+            Stock foundStock = optionalStock.get();
+            ModelMapper modelMapper = new ModelMapper();
+            modelMapper.map(requestDto, foundStock);
+            return foundStock;
+        }
+        throw new StockNotFoundException("Stock with this id does not exist");
     }
 
     @Override

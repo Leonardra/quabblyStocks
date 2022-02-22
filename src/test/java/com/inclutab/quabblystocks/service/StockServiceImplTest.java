@@ -4,6 +4,7 @@ import com.inclutab.quabblystocks.data.dtos.StockRequestDto;
 import com.inclutab.quabblystocks.data.model.Stock;
 import com.inclutab.quabblystocks.data.repository.StockRepository;
 import com.inclutab.quabblystocks.exception.StockException;
+import com.inclutab.quabblystocks.exception.StockNotFoundException;
 import com.inclutab.quabblystocks.exception.StockNotNullException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +61,29 @@ class StockServiceImplTest {
         Stock found = stockServiceImpl.findStock(1L);
         assertThat(found).isNotNull();
     }
+
+    @Test
+    void testThatExceptionIsThrownIfStockDoesNotExist(){
+        StockRequestDto stock = new StockRequestDto();
+        stock.setName("Television");
+        stock.setPrice(34000.00);
+        stockServiceImpl.createStock(stock);
+        assertThrows(StockNotFoundException.class, ()-> stockServiceImpl.findStock(2L));
+    }
+
+    @Test
+    void testThatStockCanBeUpdated(){
+        StockRequestDto stock = new StockRequestDto();
+        stock.setName("Television");
+        stock.setPrice(34000.00);
+        Stock savedStock = stockServiceImpl.createStock(stock);
+        StockRequestDto updateStock = new StockRequestDto();
+        updateStock.setName("Furniture");
+        updateStock.setPrice(30000.00);
+        Stock updatedStock = stockServiceImpl.updateStock(1L, updateStock);
+        assertThat(updatedStock.getName()).isEqualTo("Furniture");
+        assertThat(updatedStock.getPrice()).isEqualTo(30000.0);
+    }
+
+
 }
