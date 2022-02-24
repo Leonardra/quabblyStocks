@@ -63,7 +63,7 @@ public class StockServiceImpl implements StockService{
             Stock foundStock = optionalStock.get();
             ModelMapper modelMapper = new ModelMapper();
             modelMapper.map(requestDto, foundStock);
-            return foundStock;
+            return stockRepository.save(foundStock);
         }
         throw new StockNotFoundException("Stock with this id does not exist");
     }
